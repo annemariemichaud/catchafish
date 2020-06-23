@@ -1,10 +1,10 @@
 # Data analysis
-- Document here the project: catchafish
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+- Name of project: catchafish
+- Description: Fish Identification tool
+- Data Source: http://groups.inf.ed.ac.uk/f4k/GROUNDTRUTH/RECOG/?fbclid=IwAR3Mi2Nxar3W8xe-DZGWJWgP5_jnrIHcxryGVqIv7ecN4ZHV6v-HoQCbYMc
+- Type of analysis: Image Recognition
 
-Please document the project the better you can.
+
 
 # Stratup the project
 
@@ -61,10 +61,10 @@ Functionnal test with a script:
 ```bash
   $ cd /tmp
   $ catchafish-run
-``` 
+```
 
 # Continus integration
-## Github 
+## Github
 Every push of `master` branch will execute `.github/workflows/pythonpackages.yml` docker jobs.
 ## Gitlab
 Every push of `master` branch will execute `.gitlab-ci.yml` docker jobs.
