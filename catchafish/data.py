@@ -33,8 +33,31 @@ def get_data(val_split = False, val_size = 0.3):
     else:
         return X_train, X_test, y_train, y_test
 
+def get_data_test():
+    '''Cette  '''
+    path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
+    path = path_to_current_dir + '/data_test'
+    batch_size = 1000
+
+    dir_iterator = DirectoryIterator(directory = path,
+                                     image_data_generator = None,
+                                     target_size = (32, 32),
+                                     batch_size = batch_size,
+                                     shuffle = False,
+                                     dtype = int)
+
+    X_test = dir_iterator[0][0]
+    y_test = dir_iterator.labels
+    return X_test, y_test
+
 if __name__ == "__main__":
 	X_train, X_val, X_test, y_train, y_val, y_test = get_data(val_split = True)
 	print(f"X_train.shape : {X_train.shape}")
 	print(f"X_val.shape : {X_val.shape}")
 	print(f"X_test.shape : {X_test.shape}")
+  print("---")
+
+  X_test, y_test = get_data_test()
+  print(f"X_test.shape : {X_test.shape}")
+
+
