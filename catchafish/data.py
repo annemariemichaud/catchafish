@@ -51,13 +51,12 @@ def get_data_test():
     return X_test, y_test
 
 if __name__ == "__main__":
-	X_train, X_val, X_test, y_train, y_val, y_test = get_data(val_split = True)
-	print(f"X_train.shape : {X_train.shape}")
-	print(f"X_val.shape : {X_val.shape}")
-	print(f"X_test.shape : {X_test.shape}")
-  print("---")
-
-  X_test, y_test = get_data_test()
-  print(f"X_test.shape : {X_test.shape}")
+    X_train, X_val, X_test, y_train, y_val, y_test = get_data(val_split = True)
+    print(f"X_train.shape : {X_train.shape}")
+    print(f"X_val.shape : {X_val.shape}")
+    print(f"X_test.shape : {X_test.shape}")
+    print("---")
+    X_test, y_test = get_data_test()
+    print(f"X_test.shape : {X_test.shape}")
 
 
