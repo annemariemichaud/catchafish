@@ -15,6 +15,7 @@ from skimage.transform import resize
 path = '../../catchafish/data/train_data/fish_05/wpdim9cb.jpg'
 img1 = cv.imread(path)
 
+
 if feature == "SIFT" :
 
 	#detection of keypoints
