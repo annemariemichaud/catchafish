@@ -18,4 +18,4 @@ h5py
 gcsfs==0.6.0
 google-cloud-storage==1.26.0
 streamlit
-skimage
+scikit-image
