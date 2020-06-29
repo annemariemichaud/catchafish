@@ -2,14 +2,19 @@ import multiprocessing
 import time
 import warnings
 
+from catchafish.data import get_all_training_data
+from catchafish.data import NAMES_MAPPING
+
 from tensorflow.keras import Sequential, layers
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 class Trainer(object):
     """docstring for ClassName"""
-    def __init__(self, X, y, **kwargs):
+    def __init__(self, **kwargs):
         """
         FYI:
         __init__ is called every time you instatiate Trainer
@@ -22,10 +27,14 @@ class Trainer(object):
         :param y:
         :param kwargs:
         """
-        self.X_train = X
-        self.y_train = y
-        #self.kwargs = kwargs
-        #self.kwargs = ....
+        self.model = None
+        self.kwargs = kwargs
+        self.target_size = self.kwargs.get('target_size', (128,128))
+        self.n_data_augmentation = self.kwargs.get('n_data_augmentation', 10)
+        self.zca_whitening = self.kwargs.get('zca_whitening', False)
+        self.patience = self.kwargs.get('patience', 10)
+        self.epochs = self.kwargs.get('epochs', 1000)
+        self.batch_size = self.kwargs.get('batch_size', 32)
 
     def get_estimator(self):
         self.model = Sequential()
@@ -41,26 +50,50 @@ class Trainer(object):
         return self.model
 
     def train(self):
-        self.model.fit(self.X_train, self.y_train)
-        pass
+        self.X_train, self.y_train = get_all_training_data(zca_whitening=self.zca_whitening,
+            target_size=self.target_size,
+            n_data_augmentation=self.n_data_augmentation)
+
+        if self.model == None:
+            self.get_estimator()
+
+        es = EarlyStopping(monitor='val_loss', patience=self.patience, verbose=1)
+
+        history = self.model.fit(self.X_train, to_categorical(self.y_train),
+                    validation_split = 0.3,
+                    epochs = self.epochs,
+                    batch_size = self.batch_size,
+                    callbacks = [es],
+                    verbose = 1)
+
+        return self.model
 
     def cross_validate(self):
         #Patience = 5, get_data = get_data1, n_neurons = 50, n_data_augmentation = 10
         pass
 
-    def evaluate(self):
-        pass
-
-    def predict(self):
-        pass
+    #def evaluate(self):
 
     def save_model(self):
-        pass
+        path = '/model.h5'
+        self.model.save(path)
+        return f'model saved at:{path}'
+
+    def predict(self):
+        self.model = load_model('/content/drive/My Drive/vgg16_trained_layers.h5')
+
+        path_to_demo_image = '/content/drive/My Drive/demo_image.jpg'
+        demo_image = load_img(path_to_demo_image, target_size=self.target_size)
+        demo_image = img_to_array(demo_image)
+        demo_image = np.expand_dims(demo_image, axis=0)
+
+        predict_probas = self.model.predict(demo_image)
+        predict_class = np.argmax(predict_probas[0])
+
+        return NAMES_MAPPING[predict_class]
 
 if __name__ == "__main__":
-    g = get_estimator()
-    #t = Trainer(X=X_train, y=y_train, **params)
-    #del X_train, y_train
+    t = Trainer(X=X_train, y=y_train, **params)
     print(colored("############  Training model   ############", "red"))
     t.train()
     print(colored("############  Evaluating model ############", "blue"))
