@@ -9,3 +9,5 @@ black
 yapf
 python-gitlab
 twine
+streamlit
+skimage
