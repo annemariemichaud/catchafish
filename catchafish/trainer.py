@@ -1,6 +1,8 @@
 import multiprocessing
 import time
 import warnings
+import os
+from termcolor import colored
 
 from catchafish.data import get_all_training_data
 from catchafish.data import NAMES_MAPPING
@@ -11,6 +13,8 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
+
+path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
 
 class Trainer(object):
     """docstring for ClassName"""
@@ -47,6 +51,8 @@ class Trainer(object):
 
         self.model.add(layers.Dense(50, activation = 'relu'))
         self.model.add(layers.Dense(11, activation = 'softmax'))
+        self.model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
         return self.model
 
     def train(self):
@@ -75,14 +81,15 @@ class Trainer(object):
     #def evaluate(self):
 
     def save_model(self):
-        path = '/model.h5'
+        path = path_to_current_dir + '/model.h5'
         self.model.save(path)
         return f'model saved at:{path}'
 
     def predict(self):
-        self.model = load_model('/content/drive/My Drive/vgg16_trained_layers.h5')
+        path = path_to_current_dir + '/model.h5'
+        self.model = load_model(path)
 
-        path_to_demo_image = '/content/drive/My Drive/demo_image.jpg'
+        path_to_demo_image = path_to_current_dir + '/demo_image.jpg'
         demo_image = load_img(path_to_demo_image, target_size=self.target_size)
         demo_image = img_to_array(demo_image)
         demo_image = np.expand_dims(demo_image, axis=0)
@@ -93,11 +100,10 @@ class Trainer(object):
         return NAMES_MAPPING[predict_class]
 
 if __name__ == "__main__":
-    t = Trainer(X=X_train, y=y_train, **params)
-    print(colored("############  Training model   ############", "red"))
+    t = Trainer()
+    t.get_estimator()
+    print(colored("############  Training model ############", "blue"))
     t.train()
-    print(colored("############  Evaluating model ############", "blue"))
-    t.evaluate()
     print(colored("############   Saving model    ############", "green"))
     t.save_model()
 
