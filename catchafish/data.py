@@ -68,11 +68,11 @@ def get_data(val_split = False, val_size = 0.3, zca_whitening = False, target_si
     et un dataset de test (30% des images).'''
 
     client = storage.Client()
-    if not local:
+    if local:
         path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
         path = path_to_current_dir + '/data'
     else:
-        path = "gs://{}/data".format(BUCKET_NAME)
+        path = "gs://{}/data/".format(BUCKET_NAME)
 
     batch_size = 1500
     dir_iterator = DirectoryIterator(
@@ -110,11 +110,11 @@ def get_all_training_data(zca_whitening = False, target_size = (128, 128), n_dat
     afin d'entraîner le modèle sur le plus de données possibles.'''
 
     client = storage.Client()
-    if not local:
+    if local:
         path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
         path = path_to_current_dir + '/data'
     else:
-        path = "gs://{}/data".format(BUCKET_NAME)
+        path = "gs://{}/data/".format(BUCKET_NAME)
 
     batch_size = 1500
     dir_iterator = DirectoryIterator(

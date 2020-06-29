@@ -9,7 +9,6 @@ black
 yapf
 python-gitlab
 twine
-os
 numpy
 pandas
 tensorflow
