@@ -2,10 +2,15 @@
 de notre projet et aux étapes préliminaires de preprocessing.'''
 
 import os
+from google.cloud import storage
+
 import numpy as np
 import pandas as pd
+
 from tensorflow.keras.preprocessing.image import DirectoryIterator, ImageDataGenerator
 from sklearn.model_selection import train_test_split
+
+from catchafish.gcp import BUCKET_NAME
 
 NAMES_MAPPING = {
     0 : ("fish_01", "Dascyllus reticulatus"),
@@ -56,14 +61,19 @@ def data_augmentation(X, y, zca_whitening = False, n_data_augmentation = 10, tar
 
     return X, y
 
-def get_data(val_split = False, val_size = 0.3, zca_whitening = False, target_size = (128, 128), n_data_augmentation = 10):
+def get_data(val_split = False, val_size = 0.3, zca_whitening = False, target_size = (128, 128), n_data_augmentation = 10, local = False):
     '''Cette fonction parcourt le dossier contenant les images de départ et les renvoie,
     en uniformisant les tailles, sous forme de nd-arrays NumPy. La fonction exécute
     aussi un train_test_split qui distingue un dataset d'entraînement (70% des images)
     et un dataset de test (30% des images).'''
 
-    path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
-    path = path_to_current_dir + '/data'
+    client = storage.Client()
+    if local:
+        path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
+        path = path_to_current_dir + '/data'
+    else:
+        path = "gs://{}/data/".format(BUCKET_NAME)
+
     batch_size = 1500
     dir_iterator = DirectoryIterator(
         directory = path,
@@ -94,13 +104,18 @@ def get_data(val_split = False, val_size = 0.3, zca_whitening = False, target_si
     else:
         return X_train, X_test, y_train, y_test
 
-def get_all_training_data(zca_whitening = False, target_size = (128, 128), n_data_augmentation = 10):
+def get_all_training_data(zca_whitening = False, target_size = (128, 128), n_data_augmentation = 10, local = False):
     '''Cette fonction renvoie l'ensemble du dataset sous la forme d'un X (tenseur
     NumPy de 4 dimensions rassemblant les différentes images) et d'un y (targets)
     afin d'entraîner le modèle sur le plus de données possibles.'''
 
-    path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
-    path = path_to_current_dir + '/data'
+    client = storage.Client()
+    if local:
+        path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
+        path = path_to_current_dir + '/data'
+    else:
+        path = "gs://{}/data/".format(BUCKET_NAME)
+
     batch_size = 1500
     dir_iterator = DirectoryIterator(
         directory = path,
@@ -133,7 +148,7 @@ def names_mapping(y):
 
 if __name__ == "__main__":
 
-    X_train, X_val, X_test, y_train, y_val, y_test = get_data(val_split = True)
+    X_train, X_val, X_test, y_train, y_val, y_test = get_data(val_split = True, local = False)
 
     print(f"X_train.shape : {X_train.shape}")
     print(f"X_val.shape : {X_val.shape}")
@@ -141,7 +156,7 @@ if __name__ == "__main__":
 
     print("_______________________________________")
 
-    X, y = get_all_training_data()
+    X, y = get_all_training_data(local = False)
 
     print(f"X.shape : {X.shape}")
     print(y[:10])

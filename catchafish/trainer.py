@@ -6,6 +6,7 @@ from termcolor import colored
 
 from catchafish.data import get_all_training_data
 from catchafish.data import NAMES_MAPPING
+from catchafish.gcp import storage_upload
 
 from tensorflow.keras import Sequential, layers
 from tensorflow.keras.applications import VGG16
@@ -39,6 +40,7 @@ class Trainer(object):
         self.patience = self.kwargs.get('patience', 10)
         self.epochs = self.kwargs.get('epochs', 1000)
         self.batch_size = self.kwargs.get('batch_size', 32)
+        self.local = self.kwargs.get('local', False)
 
     def get_estimator(self):
         self.model = Sequential()
@@ -58,7 +60,8 @@ class Trainer(object):
     def train(self):
         self.X_train, self.y_train = get_all_training_data(zca_whitening=self.zca_whitening,
             target_size=self.target_size,
-            n_data_augmentation=self.n_data_augmentation)
+            n_data_augmentation=self.n_data_augmentation,
+            local=False)
 
         if self.model == None:
             self.get_estimator()
@@ -81,9 +84,14 @@ class Trainer(object):
     #def evaluate(self):
 
     def save_model(self):
-        path = path_to_current_dir + '/model.h5'
-        self.model.save(path)
-        return f'model saved at:{path}'
+        self.model.save('/model.h5')
+
+        if not self.local:
+            storage_upload(rm = False)
+            return 'Model saved on GCP'
+
+        else:
+            return "Model saved locally"
 
     def predict(self):
         path = path_to_current_dir + '/model.h5'

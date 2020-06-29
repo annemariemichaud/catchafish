@@ -9,5 +9,13 @@ black
 yapf
 python-gitlab
 twine
+numpy
+pandas
+tensorflow
+termcolor
+scikit-learn
+h5py
+gcsfs==0.6.0
+google-cloud-storage==1.26.0
 streamlit
-skimage
+scikit-image
