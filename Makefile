@@ -29,7 +29,7 @@ BUCKET_TRAINING_FOLDER=trainings
 
 REGION=europe-west1
 PYTHON_VERSION=3.7
-RUNTIME_VERSION=1.15
+RUNTIME_VERSION=2.1
 
 ##### Package params  - - - - - - - - - - - - - - - - - - -
 

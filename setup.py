@@ -28,8 +28,7 @@ REQUIRED_PACKAGES = [
     'streamlit',
     'scikit-image',
     'Pillow',
-    'tensorflow-gpu==2.2.0',
-    'cuda-10-1'
+    'tensorflow-gpu==2.2.0'
     ]
 
 setup(name='catchafish',

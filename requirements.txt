@@ -20,3 +20,4 @@ google-cloud-storage==1.26.0
 streamlit
 scikit-image
 Pillow
+tensorflow-gpu
