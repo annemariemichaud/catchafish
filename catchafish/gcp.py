@@ -1,5 +1,8 @@
 import os
+import json
+
 from google.cloud import storage
+from google.oauth2 import service_account
 from termcolor import colored
 
 from tensorflow.keras.models import load_model
@@ -50,3 +53,8 @@ def download_model(model = 'vgg16', bucket = BUCKET_NAME, rm = True):
         os.remove('model.h5')
 
     return model
+
+if __name__ == "__main__":
+    model = download_model()
+    if model is not None:
+        print('Yo')
