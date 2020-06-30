@@ -12,6 +12,7 @@ twine
 numpy
 pandas
 termcolor
+tensorflow.keras
 scikit-learn
 h5py
 gcsfs==0.6.0

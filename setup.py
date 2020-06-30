@@ -19,7 +19,7 @@ REQUIRED_PACKAGES = [
     'twine',
     'numpy',
     'pandas',
-    'tensorflow',
+    'tensorflow.keras',
     'termcolor',
     'scikit-learn',
     'h5py',
