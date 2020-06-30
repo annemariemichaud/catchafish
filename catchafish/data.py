@@ -72,11 +72,13 @@ def get_data(val_split = False, val_size = 0.3, zca_whitening = False, target_si
         path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
         path = path_to_current_dir + '/data'
     else:
-        path = "gs://{}/data/".format(BUCKET_NAME)
+        path = "gs://{}/data".format(BUCKET_NAME)
+        os.system('mkdir /tmp/data_tmp')
+        os.system('gsutil cp -R {} /tmp/data_tmp'.format(path))
 
     batch_size = 1500
     dir_iterator = DirectoryIterator(
-        directory = path,
+        directory = '/tmp/data_tmp/data',
         image_data_generator = None,
         target_size = target_size,
         batch_size = batch_size,
@@ -114,11 +116,13 @@ def get_all_training_data(zca_whitening = False, target_size = (128, 128), n_dat
         path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
         path = path_to_current_dir + '/data'
     else:
-        path = "gs://{}/data/".format(BUCKET_NAME)
+        path = "gs://{}/data".format(BUCKET_NAME)
+        os.system('mkdir /tmp/data_tmp')
+        os.system('gsutil cp -R {} /tmp/data_tmp'.format(path))
 
     batch_size = 1500
     dir_iterator = DirectoryIterator(
-        directory = path,
+        directory = '/tmp/data_tmp/data',
         image_data_generator = None,
         target_size = target_size,
         batch_size = batch_size,

@@ -24,7 +24,10 @@ REQUIRED_PACKAGES = [
     'scikit-learn',
     'h5py',
     'gcsfs==0.6.0',
-    'google-cloud-storage==1.26.0'
+    'google-cloud-storage==1.26.0',
+    'streamlit',
+    'scikit-image',
+    'Pillow'
     ]
 
 setup(name='catchafish',
