@@ -6,13 +6,12 @@ from termcolor import colored
 
 from catchafish.data import get_all_training_data
 from catchafish.data import NAMES_MAPPING
-from catchafish.gcp import storage_upload
+from catchafish.gcp import model_upload, download_model, MODEL_NAME, BUCKET_NAME
 
 from tensorflow.keras import Sequential, layers
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 path_to_current_dir = os.path.dirname(os.path.join(os.path.abspath(__file__)))
@@ -84,18 +83,17 @@ class Trainer(object):
     #def evaluate(self):
 
     def save_model(self):
-        self.model.save('/model.h5')
+        self.model.save('model.h5')
 
         if not self.local:
-            storage_upload(rm = False)
+            model_upload(rm = True)
             return 'Model saved on GCP'
 
         else:
             return "Model saved locally"
 
     def predict(self):
-        path = path_to_current_dir + '/model.h5'
-        self.model = load_model(path)
+        self.model = download_model(model = MODEL_NAME, bucket = BUCKET_NAME, rm = True)
 
         path_to_demo_image = path_to_current_dir + '/demo_image.jpg'
         demo_image = load_img(path_to_demo_image, target_size=self.target_size)
