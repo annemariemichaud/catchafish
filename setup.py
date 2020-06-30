@@ -27,7 +27,8 @@ REQUIRED_PACKAGES = [
     'google-cloud-storage==1.26.0',
     'streamlit',
     'scikit-image',
-    'Pillow'
+    'Pillow',
+    'wikipedia'
     ]
 
 setup(name='catchafish',

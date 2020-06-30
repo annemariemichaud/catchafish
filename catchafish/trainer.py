@@ -3,6 +3,7 @@ import time
 import warnings
 import os
 from termcolor import colored
+import numpy as np
 
 from catchafish.data import get_all_training_data
 from catchafish.data import NAMES_MAPPING
@@ -92,18 +93,16 @@ class Trainer(object):
         else:
             return "Model saved locally"
 
-    def predict(self):
+    def predict(self, image):
         self.model = download_model(model = MODEL_NAME, bucket = BUCKET_NAME, rm = True)
 
-        path_to_demo_image = path_to_current_dir + '/demo_image.jpg'
-        demo_image = load_img(path_to_demo_image, target_size=self.target_size)
-        demo_image = img_to_array(demo_image)
-        demo_image = np.expand_dims(demo_image, axis=0)
+        #image = img_to_array(demo_image)
+        image = np.expand_dims(image, axis=0)
 
-        predict_probas = self.model.predict(demo_image)
+        predict_probas = self.model.predict(image)
         predict_class = np.argmax(predict_probas[0])
 
-        return NAMES_MAPPING[predict_class]
+        return NAMES_MAPPING[predict_class][1]
 
 if __name__ == "__main__":
     t = Trainer()

@@ -29,7 +29,7 @@ BUCKET_TRAINING_FOLDER=trainings
 
 REGION=europe-west1
 PYTHON_VERSION=3.7
-RUNTIME_VERSION=1.15
+RUNTIME_VERSION=2.1
 
 ##### Package params  - - - - - - - - - - - - - - - - - - -
 
@@ -42,7 +42,7 @@ JOB_NAME=catchafish_cloud_training_$(shell date +'%Y%m%d_%H%M%S')
 
 ##### Machine Type - - - - - - - - - - - - - - - - - - - - -
 
-MACHINE_TYPE=standard_gpu
+MACHINE_TYPE=n1-standard-8
 
 # ----------------------------------
 #          INSTALL & TEST
@@ -104,8 +104,7 @@ gcp_submit_training:
 		--runtime-version=${RUNTIME_VERSION} \
 		--region ${REGION} \
 		--stream-logs \
-		--scale-tier CUSTOM \
-		--master-machine-type ${MACHINE_TYPE}
+		--scale-tier BASIC_GPU
 
 # ----------------------------------
 #      UPLOAD PACKAGE TO PYPI
