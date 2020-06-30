@@ -27,7 +27,9 @@ REQUIRED_PACKAGES = [
     'google-cloud-storage==1.26.0',
     'streamlit',
     'scikit-image',
-    'Pillow'
+    'Pillow',
+    'tensorflow-gpu==2.2.0',
+    'cuda-10-1'
     ]
 
 setup(name='catchafish',
