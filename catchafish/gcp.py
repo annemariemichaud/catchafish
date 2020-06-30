@@ -54,6 +54,19 @@ def download_model(model = 'vgg16', bucket = BUCKET_NAME, rm = True):
 
     return model
 
+#def image_upload(image_path, species_folder, bucket=BUCKET_NAME, rm = True):
+#    creds = get_credentials()
+#    client = storage.Client(credentials = creds, project = PROJECT_ID)
+#    client = client.bucket(bucket)
+#
+#    storage_location = 'data/{}'.format(species_folder)
+#
+#    blob = client.blob(storage_location)
+#    blob.upload_from_filename(image_path)
+#
+#    if rm:
+#        os.remove(image_path)
+
 if __name__ == "__main__":
     model = download_model()
     if model is not None:

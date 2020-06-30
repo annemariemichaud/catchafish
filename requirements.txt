@@ -21,3 +21,4 @@ streamlit
 scikit-image
 Pillow
 wikipedia
+google-oauth
