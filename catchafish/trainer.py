@@ -84,10 +84,11 @@ class Trainer(object):
     #def evaluate(self):
 
     def save_model(self):
-        self.model.save('model.h5')
+        os.system('mkdir /tmp/saved_model')
+        self.model.save('/tmp/saved_model/my_model')
 
         if not self.local:
-            model_upload(rm = True)
+            model_upload()
             return 'Model saved on GCP'
 
         else:

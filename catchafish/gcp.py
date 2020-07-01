@@ -26,16 +26,17 @@ def model_upload(bucket=BUCKET_NAME, rm=False):
     client = storage.Client()
     client = client.bucket(bucket)
 
-    storage_location = 'models/{}/{}'.format(MODEL_NAME, 'model.h5')
+    #storage_location = 'models/{}/{}'.format(MODEL_NAME, 'model')
 
-    blob = client.blob(storage_location)
-    blob.upload_from_filename('model.h5')
+    #blob = client.blob(storage_location)
 
-    print(colored("=> model.h5 uploaded to bucket {} inside {}".format(BUCKET_NAME, storage_location),
+    os.system('gsutil -m cp -R /tmp/saved_model/my_model gs://catchafish_gcp/models')
+
+    print(colored("=> model uploaded to bucket {} inside gs://catchafish_gcp/models".format(BUCKET_NAME),
                   "green"))
 
     if rm:
-        os.remove('model.h5')
+        os.rmtree('model')
 
 def download_model(model = 'vgg16', bucket = BUCKET_NAME, rm = True):
     creds = get_credentials()
@@ -45,7 +46,7 @@ def download_model(model = 'vgg16', bucket = BUCKET_NAME, rm = True):
 
     blob = client.blob(storage_location)
     blob.download_to_filename('model.h5')
-    print(f"=> model downloaded from storage")
+    print(f"=> model.h5 downloaded from storage")
 
     model = load_model('model.h5')
 

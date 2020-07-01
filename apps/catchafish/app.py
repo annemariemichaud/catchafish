@@ -20,5 +20,8 @@ if uploaded_image:
     trainer = Trainer()
     prediction = trainer.predict(image)
     st.markdown(f'{prediction}')
-    st.markdown('This fish is a [gold fish](https://fr.wikipedia.org/wiki/Poisson-clown).')
-    st.markdown(wikipedia.summary("goldfish",sentences=2))
+    if prediction.startswith(('A', 'E', 'I', 'O', 'U')):
+        st.markdown(f'This fish is an {prediction}.')
+    else:
+        st.markdown(f'This fish is a {prediction}.')
+    st.markdown(wikipedia.summary(prediction,sentences=1))
